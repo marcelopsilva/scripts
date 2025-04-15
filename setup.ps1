@@ -36,13 +36,6 @@ Start-Process winget -ArgumentList "install --id=Microsoft.VCRedist.2012.x64 -e"
 Start-Process winget -ArgumentList "install --id=Microsoft.VCRedist.2012.x86 -e" -Wait
 
 Write-Host "Baixando e Instalando Office 2016 PT-BR"
-$officeUrl = "https://download.microsoft.com/download/2/7/A/27AF1BE6-DD20-4CB4-B154-EBAB8A7D4A7E/officedeploymenttool_16026.20170.exe"
-$officePath = "$env:TEMP\ODT.exe"
-$configPath = "$env:TEMP\configuration.xml"
-
-# Download Office Deployment Tool
-Invoke-WebRequest -Uri $officeUrl -OutFile $officePath
-
 # Criar arquivo de configuração XML
 @"
 <Configuration>
@@ -55,6 +48,13 @@ Invoke-WebRequest -Uri $officeUrl -OutFile $officePath
   <Property Name="AUTOACTIVATE" Value="1" />
 </Configuration>
 "@ | Out-File -FilePath $configPath -Encoding UTF8
+
+$officeUrl = "https://download.microsoft.com/download/2/7/A/27AF1BE6-DD20-4CB4-B154-EBAB8A7D4A7E/officedeploymenttool_16026.20170.exe"
+$officePath = "$env:TEMP\ODT.exe"
+$configPath = "$env:TEMP\configuration.xml"
+
+# Download Office Deployment Tool
+Invoke-WebRequest -Uri $officeUrl -OutFile $officePath
 
 # Extrair ODT
 Start-Process -FilePath $officePath -ArgumentList "/extract:$env:TEMP\ODT" -Wait
