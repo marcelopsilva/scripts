@@ -8,7 +8,7 @@ Write-Host "Instalando 7-Zip via winget"
 Start-Process winget -ArgumentList "install --id=7zip.7zip -e" -Wait
 
 Write-Host "Instalando VideoLAN via winget"
-Start-Process winget -ArgumentList "install --id=VideoLAN.VLC -e" -Wait
+#Start-Process winget -ArgumentList "install --id=VideoLAN.VLC -e" -Wait
 
 Write-Host "Instalando Firefox via winget"
 Start-Process winget -ArgumentList "install --id=Mozilla.Firefox -e --accept-source-agreements --accept-package-agreements --locale pt-BR" -Wait
