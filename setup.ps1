@@ -36,36 +36,26 @@ Start-Process winget -ArgumentList "install --id=Microsoft.VCRedist.2012.x64 -e"
 Start-Process winget -ArgumentList "install --id=Microsoft.VCRedist.2012.x86 -e" -Wait
 
 Write-Host "Baixando e Instalando Office 2016 PT-BR"
-# Criar arquivo de configuração XML
-@"
+# Criar um arquivo XML de configuração básico
+$configXML = @"
 <Configuration>
-  <Add OfficeClientEdition="64" Channel="PerpetualVL2016">
-    <Product ID="ProPlusRetail">
+  <Add OfficeClientEdition="64" Channel="Current">
+    <Product ID="O365ProPlusRetail">
       <Language ID="pt-br" />
     </Product>
   </Add>
   <Display Level="None" AcceptEULA="TRUE" />
-  <Property Name="AUTOACTIVATE" Value="1" />
 </Configuration>
-"@ | Out-File -FilePath $configPath -Encoding UTF8
+"@
 
-$officeUrl = "https://download.microsoft.com/download/2/7/A/27AF1BE6-DD20-4CB4-B154-EBAB8A7D4A7E/officedeploymenttool_16026.20170.exe"
-$officePath = "$env:TEMP\ODT.exe"
-$configPath = "$env:TEMP\configuration.xml"
+$configXML | Out-File -FilePath "$env:TEMP\configuration.xml" -Encoding UTF8
 
-# Download Office Deployment Tool
-Invoke-WebRequest -Uri $officeUrl -OutFile $officePath
+# Baixar e instalar
+$url = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=O365ProPlusRetail&platform=x64&language=pt-br&version=O16GA"
+$output = "$env:TEMP\OfficeSetup.exe"
 
-# Extrair ODT
-Start-Process -FilePath $officePath -ArgumentList "/extract:$env:TEMP\ODT" -Wait
-
-# Instalar Office
-Start-Process -FilePath "$env:TEMP\ODT\setup.exe" -ArgumentList "/configure $configPath" -Wait
-
-# Limpar arquivos temporários
-Remove-Item $officePath -Force
-Remove-Item $configPath -Force
-Remove-Item "$env:TEMP\ODT" -Recurse -Force
+Invoke-WebRequest -Uri $url -OutFile $output
+Start-Process -FilePath $output -ArgumentList "/configure", "$env:TEMP\configuration.xml" -Wait
 
 Write-Host "Atualizando Windows via winget"
 Start-Process winget -ArgumentList "upgrade --all --accept-source-agreements --accept-package-agreements --include-unknown" -Wait
