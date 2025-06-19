@@ -16,8 +16,8 @@ Start-Process winget -ArgumentList "install --id=VideoLAN.VLC -e" -Wait
 Write-Host "Instalando Google.Chrome via winget"
 Start-Process winget -ArgumentList "install --id=Google.Chrome -e" -Wait
 
-Write-Host "Instalando Firefox via winget"
-Start-Process winget -ArgumentList "install --id=Mozilla.Firefox -e --accept-source-agreements --accept-package-agreements --locale pt-BR" -Wait
+# Write-Host "Instalando Firefox via winget"
+# Start-Process winget -ArgumentList "install --id=Mozilla.Firefox -e --accept-source-agreements --accept-package-agreements --locale pt-BR" -Wait
 
 Write-Host "Instalando Adobe Reader via winget"
 Start-Process winget -ArgumentList "install --id=Adobe.Acrobat.Reader.64-bit -e --accept-source-agreements --accept-package-agreements --locale pt-BR" -Wait
